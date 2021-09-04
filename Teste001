@@ -1,0 +1,308 @@
+#include <iostream>
+#include <new>
+#include <string>
+#include <stdlib.h>
+
+using namespace std;
+
+struct pessoa{
+    string nome;
+    int RG;
+
+};
+
+void adcComecoSeq(string nome, int rg, int *tamanhoDaLista, pessoa *&ponteiroSequencial ){
+
+    if (*tamanhoDaLista == 0){
+
+        pessoa *novaListaSeq = new pessoa[1];
+
+        novaListaSeq[0].nome = nome;
+        novaListaSeq[0].RG = rg;
+        ponteiroSequencial = novaListaSeq;
+
+
+    }else{
+        pessoa *novaListaSeq = new pessoa[*tamanhoDaLista + 1];
+
+        novaListaSeq[0].nome = nome;
+        novaListaSeq[0].RG = rg;
+
+
+        int cont;
+        for (cont = 0; cont < *tamanhoDaLista; cont++){
+            novaListaSeq[cont + 1].nome = ponteiroSequencial[cont].nome;
+            novaListaSeq[cont + 1].RG = ponteiroSequencial[cont].RG;
+        }
+
+        ponteiroSequencial = novaListaSeq;
+    }
+
+    *tamanhoDaLista = *tamanhoDaLista + 1;
+
+}
+
+void adcFimSeq(string nome, int rg, int *tamanhoDaLista, pessoa *&ponteiroSequencial ){
+
+    pessoa *novaListaSeq = new pessoa[*tamanhoDaLista + 1];
+
+    int cont;
+    for (cont = 0; cont < *tamanhoDaLista; cont++){
+        novaListaSeq[cont].nome = ponteiroSequencial[cont].nome;
+        novaListaSeq[cont].RG = ponteiroSequencial[cont].RG;
+    }
+
+    novaListaSeq[*tamanhoDaLista].nome = nome;
+    novaListaSeq[*tamanhoDaLista].RG = rg;
+
+    ponteiroSequencial = novaListaSeq;
+
+    *tamanhoDaLista = *tamanhoDaLista + 1;
+}
+
+void adcPosSeq(string nome, int rg, int *tamanhoDaLista, pessoa *&ponteiroSequencial, int posicao){
+
+    pessoa *novaListaSeq = new pessoa[*tamanhoDaLista + 1];
+
+    int cont;
+    for (cont = 0; cont < posicao; cont++){
+        novaListaSeq[cont].nome = ponteiroSequencial[cont].nome;
+        novaListaSeq[cont].RG = ponteiroSequencial[cont].RG;
+    }
+
+    novaListaSeq[posicao].nome = nome;
+    novaListaSeq[posicao].RG = rg;
+
+    for (cont = posicao + 1; cont < *tamanhoDaLista + 1; cont++){
+        novaListaSeq[cont].nome = ponteiroSequencial[cont - 1].nome;
+        novaListaSeq[cont].RG = ponteiroSequencial[cont - 1].RG;
+    }
+
+    ponteiroSequencial = novaListaSeq;
+
+    *tamanhoDaLista = *tamanhoDaLista + 1;
+
+}
+
+void removeIniSeq(pessoa *&ponteiroSequencial, int *tamanhoDaLista){
+
+    pessoa *novaListaSeq = new pessoa[*tamanhoDaLista - 1];
+
+    int cont;
+    for (cont = 1; cont < *tamanhoDaLista; cont++){
+        novaListaSeq[cont-1].nome = ponteiroSequencial[cont].nome;
+        novaListaSeq[cont-1].RG = ponteiroSequencial[cont].RG;
+    }
+
+    ponteiroSequencial = novaListaSeq;
+
+    *tamanhoDaLista = *tamanhoDaLista - 1;
+
+}
+
+void removeFimSeq(pessoa *&ponteiroSequencial, int *tamanhoDaLista){
+
+    pessoa *novaListaSeq = new pessoa[*tamanhoDaLista - 1];
+
+    int cont;
+    for (cont = 0; cont < *tamanhoDaLista - 1; cont++){
+        novaListaSeq[cont].nome = ponteiroSequencial[cont].nome;
+        novaListaSeq[cont].RG = ponteiroSequencial[cont].RG;
+    }
+
+    ponteiroSequencial = novaListaSeq;
+
+    *tamanhoDaLista = *tamanhoDaLista - 1;
+
+}
+
+void removePosSeq(pessoa *&ponteiroSequencial, int *tamanhoDaLista, int posicao){
+
+    pessoa *novaListaSeq = new pessoa[*tamanhoDaLista - 1];
+
+    int cont;
+    for (cont = 0; cont < *tamanhoDaLista - 1; cont++){
+        if(cont < posicao){
+            novaListaSeq[cont].nome = ponteiroSequencial[cont].nome;
+            novaListaSeq[cont].RG = ponteiroSequencial[cont].RG;
+        }else{
+            novaListaSeq[cont].nome = ponteiroSequencial[cont + 1].nome;
+            novaListaSeq[cont].RG = ponteiroSequencial[cont + 1].RG;
+        }
+    }
+
+    ponteiroSequencial = novaListaSeq;
+
+    *tamanhoDaLista = *tamanhoDaLista - 1;
+
+}
+
+string retornaNomeSeq(pessoa *&ponteiroSequencial, int *tamanhoDaLista, int rg){
+
+    string nome = "Nao encontrada";
+
+    int cont;
+    for (cont = 0; cont < *tamanhoDaLista; cont++){
+        if (ponteiroSequencial[cont].RG == rg){
+            nome = ponteiroSequencial[cont].nome;
+        }
+    }
+
+    return nome;
+
+}
+
+void imprimeSequencial(pessoa *ponteiroSequencial, int tamDaLista){
+    cout << "\n\n";
+    int cont;
+    for (cont = 0; cont < tamDaLista; cont++){
+        cout << ponteiroSequencial[cont].nome << "," << ponteiroSequencial[cont].RG << "\n";
+    }
+    cout << "\n\n";
+
+}
+
+void limpaTela(){
+    system("CLS");
+}
+
+int main(){
+
+    int funcaoDesejada = 1;
+
+    pessoa *ponteiroSequencial;
+    int tamanhoDaLista = 2;
+
+    pessoa *exemploLS = new pessoa[2];
+    exemploLS[0].nome = "John";
+    exemploLS[0].RG = 123;
+    exemploLS[1].nome = "Maicon";
+    exemploLS[1].RG = 321;
+
+    ponteiroSequencial = exemploLS;
+
+
+
+    while (funcaoDesejada < 10 && funcaoDesejada > 0) {
+
+        imprimeSequencial(ponteiroSequencial, tamanhoDaLista);
+
+        cout << "Operacoes \n";
+        cout << "1 - Insercao de um node no inicio da lista \n";
+        cout << "2 - Insercao de um node no fim da lista\n";
+        cout << "3 - Insercao de um node na posição N \n";
+        cout << "4 - Retirar um node do inicio da lista \n";
+        cout << "5 - Retirar um node no fim da lista \n";
+        cout << "6 - Retirar um node na posicao N \n";
+        cout << "7 - Procurar um node com o campo RG \n";
+        cout << "8 - Imprimir a lista. \n";
+        cout << "9 - Sair do sistema. \n";
+        cout << "\nEscolha um numero e pressione ENTER: \n";
+
+        cin >> funcaoDesejada;
+
+        limpaTela();
+
+        string nome;
+        int rg, posicao;
+
+        switch(funcaoDesejada){
+            case 1:
+                cout << "Funcao escolhida: 1 - Insercao de um node no inicio da lista \n";
+                cout << "Digite um nome\n";
+                cin >> nome;
+                cout << "Digite um RG\n";
+                cin >> rg;
+
+                adcComecoSeq(nome, rg, &tamanhoDaLista, ponteiroSequencial);
+                break;
+
+            case 2:
+                cout << "Funcao escolhida: 2 - Insercao de um node no fim da lista\n";
+                cout << "Digite um nome\n";
+                cin >> nome;
+                cout << "Digite um RG\n";
+                cin >> rg;
+
+                if (tamanhoDaLista == 0){
+                    adcComecoSeq(nome, rg, &tamanhoDaLista, ponteiroSequencial);
+                }else{
+                    adcFimSeq(nome, rg, &tamanhoDaLista, ponteiroSequencial);
+                }
+                break;
+
+            case 3:
+                cout << "Funcao escolhida: 3 - Insercao de um node na posição N \n";
+                cout << "Digite um nome\n";
+                cin >> nome;
+                cout << "Digite um RG\n";
+                cin >> rg;
+                cout << "Digite uma posicao\n";
+                cin >> posicao;
+
+                if(posicao == 0){
+                    adcComecoSeq(nome, rg, &tamanhoDaLista, ponteiroSequencial);
+                }else if(posicao == tamanhoDaLista){
+                    adcFimSeq(nome, rg, &tamanhoDaLista, ponteiroSequencial);
+                }else{
+                    adcPosSeq(nome, rg, &tamanhoDaLista, ponteiroSequencial, posicao);
+                }
+
+                break;
+
+            case 4:
+                cout << "Funcao escolhida: 4 - Retirar um node do inicio da lista \n";
+
+                if (tamanhoDaLista == 0){
+                    cout << "\n Lista Vazia!\n";
+                }else{
+                    removeIniSeq(ponteiroSequencial, &tamanhoDaLista);
+                }
+
+                break;
+
+            case 5:
+                cout << "Funcao escolhida: 5 - Retirar um node no fim da lista \n";
+
+                if (tamanhoDaLista == 0){
+                    cout << "\n Lista Vazia!\n";
+                }else{
+                    removeFimSeq(ponteiroSequencial, &tamanhoDaLista);
+                }
+                break;
+            case 6:
+                cout << "Funcao escolhida: 6 - Retirar um node na posicao N \n";
+                if (tamanhoDaLista == 0){
+                    cout << "\n Lista Vazia!\n";
+                }else {
+                    cout << "Digite uma posicao";
+                    cin >> posicao;
+
+                    if(posicao == 0){
+                        removeIniSeq(ponteiroSequencial, &tamanhoDaLista);
+                    }else if(posicao == tamanhoDaLista){
+                        removeFimSeq(ponteiroSequencial, &tamanhoDaLista);
+                    }else{
+                        removePosSeq(ponteiroSequencial, &tamanhoDaLista, posicao);
+                    }
+                }
+                break;
+
+            case 7:
+                cout << "Funcao escolhida: 7 - Procurar um node com o campo RG \n";
+                if (tamanhoDaLista == 0){
+                    cout << "\n Lista Vazia!\n";
+                }else {
+                    cout << "Digite um RG\n";
+                    cin >> rg;
+
+                    cout << "Nome: " << retornaNomeSeq(ponteiroSequencial, &tamanhoDaLista, rg);
+                }
+                break;
+
+            case 8:
+                imprimeSequencial(ponteiroSequencial, tamanhoDaLista);
+                break;
+        }
+    }
+}
